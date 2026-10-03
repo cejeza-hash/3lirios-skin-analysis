@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3 LIRIOS · Skin Analysis — Prototipo</title>
+<style>
+:root{--ink:#17352c;--muted:#66756f;--line:#dce6e1;--soft:#f3f7f4;--accent:#2f765d;--warn:#fff7df}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#eef4f0;color:var(--ink)}.app{max-width:760px;margin:auto;min-height:100vh;background:#fff}.hero{padding:28px 22px;background:linear-gradient(135deg,#e9f5ee,#fff)}.brand{font-weight:800;letter-spacing:.08em}.hero h1{font-size:30px;margin:8px 0}.hero p{color:var(--muted);line-height:1.45}.steps{display:flex;gap:6px;margin-top:18px}.dot{height:7px;flex:1;background:#d9e5df;border-radius:8px}.dot.on{background:var(--accent)}main{padding:22px}.card{border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;background:#fff}.card h2{margin:0 0 10px;font-size:20px}.small{font-size:13px;color:var(--muted);line-height:1.45}.q{margin:17px 0}.q b{display:block;margin-bottom:8px}.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.opts label{border:1px solid var(--line);padding:10px;border-radius:12px;cursor:pointer}.opts input{margin-right:7px}button,.btn{width:100%;border:0;border-radius:13px;padding:13px 15px;font-weight:700;font-size:15px;background:var(--accent);color:white;cursor:pointer}.secondary{background:#eef4f0;color:var(--ink);margin-top:8px}.danger{background:#a34545}.hidden{display:none!important}video,canvas,#photo{width:100%;border-radius:16px;background:#15221e;max-height:440px;object-fit:cover}.editor{position:relative;margin-top:10px;overflow:hidden;border-radius:16px;background:#15221e}.editor canvas{display:block;touch-action:none;aspect-ratio:4/5;max-height:none;cursor:grab}.editor canvas.dragging{cursor:grabbing}.editor .oval{pointer-events:none}.controls{margin:12px 0}.controls label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}.controls input[type=range]{width:100%;accent-color:var(--accent)}.hint{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}.guide{position:relative}.oval{position:absolute;left:18%;right:18%;top:8%;bottom:8%;border:2px dashed rgba(255,255,255,.85);border-radius:50%}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:var(--soft);border-radius:14px;padding:12px}.metric strong{display:block;font-size:22px}.bar{height:8px;background:#dfe8e3;border-radius:9px;overflow:hidden;margin-top:7px}.fill{height:100%;background:var(--accent)}.result{font-size:26px;font-weight:800;margin:5px 0 14px}.zoneGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.zoneCard{background:var(--soft);border-radius:14px;padding:12px}.zoneCard b{display:block;margin-bottom:5px}.zoneVals{font-size:13px;color:var(--muted);line-height:1.45}.status{padding:10px 12px;border-radius:12px;background:#eef4f0;font-size:13px;margin:10px 0}.status.warn{background:#fff7df}.status.ok{background:#e7f5ec}.qualityGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.qualityGrid div{background:var(--soft);padding:9px;border-radius:12px;text-align:center;font-size:12px}.qualityGrid b{display:block;font-size:17px}.report{border-top:1px solid #ddd;margin-top:18px;padding-top:12px}.mapWrap{position:relative;margin:12px auto;max-width:420px}.mapWrap canvas{width:100%;border-radius:16px;display:block}.legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin:8px 0}.legend span{background:var(--soft);padding:5px 8px;border-radius:999px}.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}.compare>div{background:var(--soft);border-radius:14px;padding:12px}.compare b{font-size:18px;display:block}@media(max-width:520px){.compare{grid-template-columns:1fr}}@media(max-width:520px){.zoneGrid{grid-template-columns:1fr}}.alert{background:var(--warn);padding:13px;border-radius:12px;font-size:13px;line-height:1.4}.routine{padding-left:20px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff}.consent{display:flex;gap:10px;align-items:flex-start}.consent input{margin-top:4px}@media(max-width:520px){.metrics{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.hero h1{font-size:26px}}
+</style>
+</head>
+<body><div class="app">
+<header class="hero"><div class="brand">3 LIRIOS · BIENESTAR Y CIENCIA</div><h1>Skin Analysis <span style="font-weight:400">β</span></h1><p>Prototipo de evaluación cosmética orientativa de la piel. Analiza una fotografía localmente y combina el resultado con un breve cuestionario.</p><div class="steps"><i class="dot on"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div></header>
+<main>
+<section id="s1" class="card"><h2>1. Antes de comenzar</h2><p class="small">Este prototipo no diagnostica enfermedades ni sustituye una consulta dermatológica. La fotografía se procesa en este dispositivo y no se sube a un servidor.</p><div class="alert">Para una comparación más consistente: rostro limpio, sin maquillaje, luz blanca uniforme, sin filtros y cámara a unos 40–60 cm.</div><p class="consent"><input id="consent" type="checkbox"><label for="consent">Acepto realizar una evaluación cosmética orientativa y entiendo sus limitaciones.</label></p><button onclick="go(2)">Comenzar evaluación</button></section>
+<section id="s2" class="card hidden"><h2>2. Cuestionario</h2>
+<div class="q"><b>¿Cómo notas la piel 30–60 min después de lavarla?</b><div class="opts"><label><input type="radio" name="feel" value="dry">Tirante/seca</label><label><input type="radio" name="feel" value="normal">Cómoda</label><label><input type="radio" name="feel" value="oily">Brillante/grasa</label><label><input type="radio" name="feel" value="mixed">Zona T brillante</label></div></div>
+<div class="q"><b>¿Con qué frecuencia aparece brillo durante el día?</b><select id="shine"><option value="0">Casi nunca</option><option value="1">A veces</option><option value="2">Frecuentemente</option><option value="3">Muy frecuentemente</option></select></div>
+<div class="q"><b>¿Tu piel suele reaccionar con ardor o enrojecimiento a cosméticos?</b><select id="sensitive"><option value="0">No</option><option value="1">Ocasionalmente</option><option value="2">Frecuentemente</option></select></div>
+<div class="q"><b>Bandera de seguridad</b><p class="small">¿Quieres evaluar una lesión que sangra, cambia rápidamente, presenta una herida que no cicatriza o causa dolor importante?</p><select id="redflag"><option value="0">No</option><option value="1">Sí</option></select></div>
+<button onclick="go(3)">Continuar a cámara</button><button class="secondary" onclick="go(1)">Atrás</button></section>
+<section id="s3" class="card hidden"><h2>3. Fotografía facial</h2><p class="small">Carga o toma una fotografía. <b>Después podrás ajustarla antes de analizarla.</b></p><div id="cameraWrap" class="guide"><video id="video" autoplay playsinline></video><div class="oval"></div></div><button id="camBtn" onclick="startCam()">Activar cámara</button><button id="snapBtn" class="hidden" onclick="snap()">Tomar fotografía</button><label class="btn secondary" style="display:block;text-align:center">O cargar una fotografía<input id="file" type="file" accept="image/*" style="display:none" onchange="loadFile(event)"></label><div id="editWrap" class="hidden"><div class="editor guide"><canvas id="canvas" width="720" height="900"></canvas><div class="oval"></div></div><div class="hint"><b>Arrastra con un dedo</b> para mover el rostro · <b>pellizca con dos dedos</b> para ampliar/reducir. También puedes usar los controles.</div><div id="faceStatus" class="status">Preparando detección automática del rostro…</div>
+<div class="qualityGrid"><div><b id="qLight">—</b>Iluminación</div><div><b id="qSharp">—</b>Nitidez</div><div><b id="qPose">—</b>Centrado</div></div><div class="controls"><label>Zoom</label><input id="zoom" type="range" min="1" max="4" value="1" step="0.01" oninput="syncSliders()"><label>Posición horizontal</label><input id="posX" type="range" min="-100" max="100" value="0" step="1" oninput="syncSliders()"><label>Posición vertical</label><input id="posY" type="range" min="-100" max="100" value="0" step="1" oninput="syncSliders()"></div><button onclick="autoCenterFace()">Centrar rostro automáticamente</button><button style="margin-top:8px" onclick="analyzeAdjusted()">Usar esta imagen y analizar</button><button class="secondary" onclick="changePhoto()">Cambiar fotografía</button></div><img id="photo" class="hidden" alt="captura"><button class="secondary" onclick="go(2)">Atrás</button></section>
+<section id="s4" class="card hidden"><h2>4. Resultado orientativo</h2><div id="flag" class="alert hidden"></div><div id="normalResult"><div class="small">PERFIL COSMÉTICO ESTIMADO</div><div id="type" class="result">—</div><div class="metrics"><div class="metric">Oleosidad aparente<strong id="oil">—</strong><div class="bar"><div id="oilbar" class="fill"></div></div></div><div class="metric">Enrojecimiento aparente<strong id="red">—</strong><div class="bar"><div id="redbar" class="fill"></div></div></div><div class="metric">Uniformidad visual<strong id="uniform">—</strong><div class="bar"><div id="unibar" class="fill"></div></div></div><div class="metric">Luminosidad<strong id="light">—</strong><div class="bar"><div id="lightbar" class="fill"></div></div></div></div><h2 style="margin-top:20px">Análisis por zonas faciales</h2><p class="small">Los valores son índices visuales relativos de esta fotografía, no mediciones clínicas.</p><div id="zoneGrid" class="zoneGrid"></div>
+<h2 style="margin-top:20px">Mapa facial orientativo</h2>
+<p class="small">La superposición indica las áreas de muestreo utilizadas por el algoritmo. Se han restringido para evitar cabello, ojos, labios y bordes faciales. No representa lesiones ni diagnóstico.</p>
+<div class="mapWrap"><canvas id="mapCanvas" width="720" height="900"></canvas></div>
+<div class="legend"><span>Frente</span><span>Mejillas</span><span>Nariz</span><span>Mentón</span></div>
+<h2 style="margin-top:20px">Comparación zona T vs. mejillas</h2>
+<div class="compare"><div><b id="tzone">—</b>Índice relativo zona T</div><div><b id="cheekzone">—</b>Índice relativo mejillas</div></div><div class="report"><h2>Resumen del análisis</h2><p id="summary" class="small"></p></div>
+<h2 style="margin-top:20px">Rutina cosmética básica</h2><ul id="routine" class="routine"></ul><div class="alert">Los índices de imagen de esta versión β son heurísticos y dependen de iluminación, cámara y tono de piel. No están validados como biomarcadores clínicos.</div></div><button style="margin-top:14px" onclick="resetApp()">Nueva evaluación</button></section>
+</main><div class="footer">3 LIRIOS · Oxapampa, Perú · Prototipo β 0.6 · prueba para socios</div></div>
+<script>
+let stream=null,sourceImage=null;
+let state={zoom:1,panX:0,panY:0};
+let gesture={active:false,startX:0,startY:0,startPanX:0,startPanY:0,startDist:0,startZoom:1};
+let detectedFace=null, detectorReady=false;
+
+function dots(n){document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i<n))}
+function go(n){
+  if(n===2&&!document.getElementById('consent').checked){alert('Debes aceptar las condiciones para continuar.');return}
+  document.querySelectorAll('main>section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById('s'+n).classList.remove('hidden');dots(n);scrollTo(0,0)
+}
+async function startCam(){
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1280},height:{ideal:1280}},audio:false});
+    video.srcObject=stream;camBtn.classList.add('hidden');snapBtn.classList.remove('hidden')
+  }catch(e){alert('No fue posible acceder a la cámara. Puedes cargar una fotografía desde el dispositivo.')}
+}
+function snap(){
+  let w=video.videoWidth,h=video.videoHeight;if(!w)return;
+  let temp=document.createElement('canvas');temp.width=w;temp.height=h;
+  temp.getContext('2d').drawImage(video,0,0,w,h);
+  let im=new Image();im.onload=()=>setEditorImage(im);im.src=temp.toDataURL('image/jpeg',.92);
+  if(stream)stream.getTracks().forEach(t=>t.stop())
+}
+function loadFile(e){
+  const f=e.target.files[0];if(!f)return;
+  const im=new Image();
+  im.onload=()=>{setEditorImage(im);URL.revokeObjectURL(im.src)};
+  im.src=URL.createObjectURL(f)
+}
+function setEditorImage(im){
+  sourceImage=im;detectedFace=null;
+  state={zoom:1,panX:0,panY:0}; updateSliders();
+  cameraWrap.classList.add('hidden');camBtn.classList.add('hidden');snapBtn.classList.add('hidden');
+  editWrap.classList.remove('hidden');renderEditor();setupGestures();photoQuality();detectFace()
+}
+function getDraw(){
+  const c=canvas,cw=c.width,ch=c.height,iw=sourceImage.naturalWidth||sourceImage.width,ih=sourceImage.naturalHeight||sourceImage.height;
+  let base=Math.max(cw/iw,ch/ih),scale=base*state.zoom,dw=iw*scale,dh=ih*scale;
+  let centerX=cw/2+state.panX,centerY=ch/2+state.panY;
+  return {cw,ch,iw,ih,scale,dw,dh,ox:centerX-dw/2,oy:centerY-dh/2}
+}
+function clampPan(){
+  if(!sourceImage)return;
+  const c=canvas, iw=sourceImage.naturalWidth||sourceImage.width, ih=sourceImage.naturalHeight||sourceImage.height;
+  let base=Math.max(c.width/iw,c.height/ih),dw=iw*base*state.zoom,dh=ih*base*state.zoom;
+  let maxX=Math.max(0,(dw-c.width)/2),maxY=Math.max(0,(dh-c.height)/2);
+  state.panX=Math.max(-maxX,Math.min(maxX,state.panX));
+  state.panY=Math.max(-maxY,Math.min(maxY,state.panY))
+}
+function renderEditor(){
+  if(!sourceImage)return;
+  clampPan();
+  const ctx=canvas.getContext('2d'),d=getDraw();
+  ctx.clearRect(0,0,d.cw,d.ch);ctx.drawImage(sourceImage,d.ox,d.oy,d.dw,d.dh)
+}
+function updateSliders(){
+  zoom.value=state.zoom;
+  if(sourceImage){
+    const d=getDraw(),mx=Math.max(1,(d.dw-d.cw)/2),my=Math.max(1,(d.dh-d.ch)/2);
+    posX.value=Math.max(-100,Math.min(100,state.panX/mx*100));
+    posY.value=Math.max(-100,Math.min(100,state.panY/my*100))
+  }else{posX.value=0;posY.value=0}
+}
+function syncSliders(){
+  if(!sourceImage)return;
+  state.zoom=+zoom.value;
+  const d=getDraw(),mx=Math.max(0,(d.dw-d.cw)/2),my=Math.max(0,(d.dh-d.ch)/2);
+  state.panX=(+posX.value/100)*mx;state.panY=(+posY.value/100)*my;
+  renderEditor()
+}
+function dist(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
+function setupGestures(){
+  if(canvas.dataset.gestures)return;canvas.dataset.gestures='1';
+  canvas.addEventListener('pointerdown',e=>{
+    canvas.setPointerCapture(e.pointerId); pointers.set(e.pointerId,e);
+    canvas.classList.add('dragging');
+    if(pointers.size===1){gesture.startX=e.clientX;gesture.startY=e.clientY;gesture.startPanX=state.panX;gesture.startPanY=state.panY}
+    if(pointers.size===2){let p=[...pointers.values()];gesture.startDist=dist(p[0],p[1]);gesture.startZoom=state.zoom}
+  });
+  canvas.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,e);
+    let p=[...pointers.values()];
+    if(p.length===1){
+      state.panX=gesture.startPanX+(p[0].clientX-gesture.startX)*(canvas.width/canvas.clientWidth);
+      state.panY=gesture.startPanY+(p[0].clientY-gesture.startY)*(canvas.height/canvas.clientHeight)
+    }else if(p.length>=2){
+      let ratio=dist(p[0],p[1])/Math.max(1,gesture.startDist);
+      state.zoom=Math.max(1,Math.min(4,gesture.startZoom*ratio))
+    }
+    renderEditor();updateSliders()
+  });
+  function end(e){pointers.delete(e.pointerId);canvas.classList.remove('dragging');if(pointers.size===1){let p=[...pointers.values()][0];gesture.startX=p.clientX;gesture.startY=p.clientY;gesture.startPanX=state.panX;gesture.startPanY=state.panY}}
+  canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end)
+}
+const pointers=new Map();
+
+async function loadDetector(){
+  if(detectorReady)return true;
+  const status=document.getElementById('faceStatus');
+  try{
+    if(!('FaceDetector' in window))throw new Error('FaceDetector no disponible');
+    window.faceDetector3L=new FaceDetector({fastMode:true,maxDetectedFaces:1});
+    detectorReady=true;return true
+  }catch(e){
+    status.className='status warn';
+    status.textContent='La detección automática del rostro no está disponible en este navegador. Puedes centrarlo manualmente con el dedo; el análisis por zonas seguirá funcionando.';
+    return false
+  }
+}
+async function detectFace(){
+  const status=document.getElementById('faceStatus');
+  status.className='status';status.textContent='Buscando el rostro automáticamente…';
+  if(!(await loadDetector()))return;
+  try{
+    const faces=await window.faceDetector3L.detect(sourceImage);
+    if(!faces.length)throw new Error('No face');
+    const b=faces[0].boundingBox;
+    detectedFace={x:b.x,y:b.y,w:b.width,h:b.height};
+    status.className='status ok';status.textContent='Rostro detectado. Se ha preparado el centrado automático.';
+    autoCenterFace()
+  }catch(e){
+    detectedFace=null;status.className='status warn';
+    status.textContent='No pude localizar el rostro automáticamente. Centra la cara dentro del óvalo usando el dedo y el zoom.'
+  }
+}
+function autoCenterFace(){
+  if(!sourceImage)return;
+  const status=document.getElementById('faceStatus');
+  if(!detectedFace){status.className='status warn';status.textContent='No hay una detección automática disponible. Ajusta el rostro manualmente.';return}
+  const c=canvas,iw=sourceImage.naturalWidth||sourceImage.width,ih=sourceImage.naturalHeight||sourceImage.height;
+  const targetW=c.width*.56,targetH=c.height*.78;
+  let base=Math.max(c.width/iw,c.height/ih);
+  let desiredScale=Math.min(targetW/detectedFace.w,targetH/detectedFace.h);
+  state.zoom=Math.max(1,Math.min(4,desiredScale/base));
+  let scale=base*state.zoom;
+  let fx=(detectedFace.x+detectedFace.w/2)*scale,fy=(detectedFace.y+detectedFace.h/2)*scale;
+  let dw=iw*scale,dh=ih*scale,defaultOx=(c.width-dw)/2,defaultOy=(c.height-dh)/2;
+  state.panX=c.width/2-(defaultOx+fx);state.panY=c.height*.49-(defaultOy+fy);
+  renderEditor();updateSliders();photoQuality()
+}
+
+function photoQuality(){
+  if(!sourceImage)return;
+  renderEditor();
+  const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
+  const d=ctx.getImageData(Math.round(w*.2),Math.round(h*.12),Math.round(w*.6),Math.round(h*.76)).data;
+  let lum=0,lum2=0,n=0,edges=0,last=null;
+  for(let i=0;i<d.length;i+=16){
+    let l=.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];lum+=l;lum2+=l*l;n++;
+    if(last!==null)edges+=Math.abs(l-last);last=l
+  }
+  lum/=n; let contrast=Math.sqrt(Math.max(0,lum2/n-lum*lum)), sharp=edges/n;
+  let lightScore=Math.max(0,100-Math.abs(lum-145)*1.15);
+  let sharpScore=Math.max(0,Math.min(100,(sharp-4)*7));
+  let poseScore=detectedFace?92:70;
+  qLight.textContent=Math.round(lightScore)+'/100';qSharp.textContent=Math.round(sharpScore)+'/100';qPose.textContent=Math.round(poseScore)+'/100';
+  return {lightScore,sharpScore,poseScore,lum,contrast}
+}
+function analyzeAdjusted(){
+  if(!sourceImage){alert('Primero carga o toma una fotografía.');return}
+  try{
+    renderEditor();let q=photoQuality();
+    if(q && (q.lightScore<28 || q.sharpScore<18)){
+      if(!confirm('La fotografía presenta iluminación o nitidez insuficiente. Esto puede reducir la fiabilidad del análisis. ¿Deseas analizarla de todos modos?')) return;
+    }
+    analyze(canvas)
+  }catch(e){console.error(e);alert('Ocurrió un error al procesar la imagen. Intenta cargar otra fotografía.')}
+}
+function changePhoto(){
+  sourceImage=null;detectedFace=null;editWrap.classList.add('hidden');cameraWrap.classList.remove('hidden');
+  video.classList.remove('hidden');camBtn.classList.remove('hidden');file.value=''
+}
+
+function globalCalibration(ctx,w,h){
+  const d=ctx.getImageData(Math.round(w*.18),Math.round(h*.12),Math.round(w*.64),Math.round(h*.76)).data;
+  let L=0,n=0;
+  for(let i=0;i<d.length;i+=20){L+=.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];n++}
+  return {lum:n?L/n:145, gain:n?145/(L/n):1}
+}
+function drawMap(zones,results){
+  const mc=mapCanvas,mctx=mc.getContext('2d');
+  mctx.clearRect(0,0,mc.width,mc.height);
+  mctx.drawImage(canvas,0,0,mc.width,mc.height);
+  mctx.lineWidth=5;mctx.font='bold 24px sans-serif';mctx.textAlign='center';
+  Object.entries(zones).forEach(([name,z])=>{
+    let x=z.x*mc.width,y=z.y*mc.height,w=z.w*mc.width,h=z.h*mc.height;
+    let v=results[name].oil;
+    mctx.fillStyle=`rgba(255,255,255,${0.10+v/500})`;
+    mctx.strokeStyle='rgba(255,255,255,.9)';
+    mctx.beginPath();mctx.roundRect(x,y,w,h,18);mctx.fill();mctx.stroke();
+    mctx.fillStyle='rgba(0,0,0,.72)';mctx.fillText(name.replace('Mejilla ','M. '),x+w/2,y+h/2+8)
+  })
+}
+function sampleRegion(ctx,w,h,z,cal){
+  let x=Math.max(0,Math.round(z.x*w)),y=Math.max(0,Math.round(z.y*h)),rw=Math.max(2,Math.round(z.w*w)),rh=Math.max(2,Math.round(z.h*h));
+  if(x+rw>w)rw=w-x;if(y+rh>h)rh=h-y;
+  let d=ctx.getImageData(x,y,rw,rh).data,R=0,G=0,B=0,L=0,L2=0,n=0,bright=0;
+  for(let i=0;i<d.length;i+=16){let gain=(cal&&cal.gain)||1,r=Math.min(255,d[i]*gain),g=Math.min(255,d[i+1]*gain),b=Math.min(255,d[i+2]*gain),l=.2126*r+.7152*g+.0722*b;R+=r;G+=g;B+=b;L+=l;L2+=l*l;if(l>180)bright++;n++}
+  if(!n)return {oil:0,red:0,uniform:0,light:0};
+  R/=n;G/=n;B/=n;L/=n;let sd=Math.sqrt(Math.max(0,L2/n-L*L));
+  return {
+    oil:Math.max(0,Math.min(100,(bright/n*500)*.72)),
+    red:Math.max(0,Math.min(100,50+(R-(G+B)/2)*1.4)),
+    uniform:Math.max(0,Math.min(100,100-sd*1.55)),
+    light:Math.max(0,Math.min(100,L/255*100)),texture:Math.max(0,Math.min(100,sd*2.2))
+  }
+}
+function analyze(c){
+  if(redflag.value==='1'){showFlag();return}
+  const ctx=c.getContext('2d'),w=c.width,h=c.height;
+  let zones={
+    'Frente':{x:.37,y:.245,w:.26,h:.105},
+    'Mejilla izquierda':{x:.255,y:.43,w:.185,h:.16},
+    'Nariz':{x:.445,y:.405,w:.11,h:.165},
+    'Mejilla derecha':{x:.56,y:.43,w:.185,h:.16},
+    'Mentón':{x:.405,y:.685,w:.19,h:.095}
+  };
+  // If a face was detected, project its bounding box into the adjusted canvas and derive regions from it.
+  if(detectedFace){
+    const d=getDraw(),fx=(d.ox+detectedFace.x*d.scale)/w,fy=(d.oy+detectedFace.y*d.scale)/h,fw=detectedFace.w*d.scale/w,fh=detectedFace.h*d.scale/h;
+    const Z=(rx,ry,rw,rh)=>({x:Math.max(0,fx+fw*rx),y:Math.max(0,fy+fh*ry),w:Math.min(1,fw*rw),h:Math.min(1,fh*rh)});
+    zones={'Frente':Z(.30,.205,.40,.135),'Mejilla izquierda':Z(.13,.405,.28,.19),'Nariz':Z(.425,.395,.15,.225),'Mejilla derecha':Z(.59,.405,.28,.19),'Mentón':Z(.35,.735,.30,.105)}
+  }
+  const cal=globalCalibration(ctx,w,h);
+  let results={};Object.entries(zones).forEach(([k,z])=>results[k]=sampleRegion(ctx,w,h,z,cal));
+  let vals=Object.values(results);
+  let imgOil=vals.reduce((a,b)=>a+b.oil,0)/vals.length;
+  let red=vals.reduce((a,b)=>a+b.red,0)/vals.length;
+  let uniform=vals.reduce((a,b)=>a+b.uniform,0)/vals.length;
+  let luminos=vals.reduce((a,b)=>a+b.light,0)/vals.length;
+  let feel=(document.querySelector('input[name=feel]:checked')||{}).value||'normal',shine=+document.getElementById('shine').value;
+  let oil=Math.max(0,Math.min(100,imgOil*.55+shine*15+(feel==='oily'?25:feel==='mixed'?15:feel==='dry'?-15:0)));
+  let tOil=(results['Frente'].oil+results['Nariz'].oil+results['Mentón'].oil)/3;
+  let cheekOil=(results['Mejilla izquierda'].oil+results['Mejilla derecha'].oil)/2;
+  let type=feel==='dry'?'Seca':feel==='oily'?'Grasa':feel==='mixed'?'Mixta':'Normal / equilibrada';
+  if(feel==='normal'&&oil>60)type='Grasa';
+  else if(feel==='normal'&&(oil>38||tOil-cheekOil>18))type='Mixta';
+  render(type,oil,red,uniform,luminos,results,zones)
+}
+function level(v){return v<34?'Baja':v<67?'Media':'Alta'}
+function render(type,oil,red,uni,light,zones,zoneDefs){
+  flag.classList.add('hidden');normalResult.classList.remove('hidden');document.getElementById('type').textContent=type;
+  oilEl('oil','oilbar',level(oil),oil);oilEl('red','redbar',level(red),red);oilEl('uniform','unibar',Math.round(uni)+'/100',uni);oilEl('light','lightbar',Math.round(light)+'/100',light);
+  zoneGrid.innerHTML=Object.entries(zones).map(([name,v])=>`<div class="zoneCard"><b>${name}</b><div class="zoneVals">Oleosidad: ${level(v.oil)} (${Math.round(v.oil)}/100)<br>Enrojecimiento: ${level(v.red)} (${Math.round(v.red)}/100)<br>Uniformidad: ${Math.round(v.uniform)}/100<br>Luminosidad: ${Math.round(v.light)}/100<br>Textura visible: ${Math.round(v.texture)}/100</div></div>`).join('');
+  let tz=(zones['Frente'].oil+zones['Nariz'].oil+zones['Mentón'].oil)/3;
+  let cz=(zones['Mejilla izquierda'].oil+zones['Mejilla derecha'].oil)/2;
+  tzone.textContent=Math.round(tz)+'/100';cheekzone.textContent=Math.round(cz)+'/100';
+  drawMap(zoneDefs,zones);
+  let sens=+sensitive.value;
+  let r=['Mañana: limpieza suave y fotoprotector de amplio espectro.','Noche: limpieza suave y producto hidratante compatible con tu piel.'];
+  if(type==='Seca')r.splice(1,0,'Priorizar hidratación y evitar limpieza excesivamente deslipidizante.');
+  if(type==='Grasa'||type==='Mixta')r.splice(1,0,'Preferir texturas ligeras/no comedogénicas y evitar sobrelimpieza.');
+  if(sens>0)r.push('Por sensibilidad declarada: introducir productos nuevos de uno en uno y suspenderlos si causan irritación.');
+  routine.innerHTML=r.map(x=>'<li>'+x+'</li>').join('');
+  let zoneEntries=Object.entries(zones);
+  let mostRed=zoneEntries.sort((a,b)=>b[1].red-a[1].red)[0][0];
+  let mostOil=zoneEntries.sort((a,b)=>b[1].oil-a[1].oil)[0][0];
+  summary.innerHTML=`Perfil cosmético estimado: <b>${type}</b>. La zona con mayor índice relativo de oleosidad es <b>${mostOil}</b> y la de mayor enrojecimiento aparente es <b>${mostRed}</b>. Estos resultados dependen de la iluminación, cámara y ajuste del rostro y no constituyen diagnóstico médico.`;
+  go(4)
+}
+function oilEl(id,barId,txt,val){document.getElementById(id).textContent=txt;document.getElementById(barId).style.width=Math.round(val)+'%'}
+function showFlag(){
+  normalResult.classList.add('hidden');let f=flag;f.classList.remove('hidden');
+  f.innerHTML='<b>No continuar con clasificación cosmética de esa lesión.</b><br>Por la respuesta de seguridad, esta herramienta no es adecuada para evaluarla. Se recomienda valoración por un profesional sanitario/dermatólogo.';go(4)
+}
+
+function currentResultText(){
+  const typeTxt=(document.getElementById('type')||{}).textContent||'No disponible';
+  const oilTxt=(document.getElementById('oil')||{}).textContent||'—';
+  const redTxt=(document.getElementById('red')||{}).textContent||'—';
+  const uniTxt=(document.getElementById('uniform')||{}).textContent||'—';
+  const lightTxt=(document.getElementById('light')||{}).textContent||'—';
+  return `3 LIRIOS – Skin Analysis (prueba beta)\nPerfil cosmético estimado: ${typeTxt}\nOleosidad aparente: ${oilTxt}\nEnrojecimiento aparente: ${redTxt}\nUniformidad: ${uniTxt}\nLuminosidad: ${lightTxt}\n\nResultado orientativo; no constituye diagnóstico médico.`;
+}
+function shareWhatsApp(){
+  const text=encodeURIComponent(currentResultText());
+  window.open('https://wa.me/?text='+text,'_blank');
+}
+async function shareApp(){
+  const text='Prueba el prototipo 3 LIRIOS – Skin Analysis. Es una evaluación cosmética orientativa de la piel.';
+  const url=(location.protocol==='http:'||location.protocol==='https:')?location.href:'';
+  if(navigator.share){
+    try{await navigator.share({title:'3 LIRIOS – Skin Analysis',text,url:url||undefined});return}catch(e){}
+  }
+  if(url){
+    window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url),'_blank');
+  }else{
+    alert('Para compartir la aplicación como enlace por WhatsApp primero debe estar publicada en una dirección web (HTTPS). Este archivo sí puede enviarse directamente como documento por WhatsApp.');
+  }
+}
+function resetApp(){if(stream)stream.getTracks().forEach(t=>t.stop());location.reload()}
+</script></body></html>
